@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Epson Resetter Library</title>
+<style>
+:root{--bg:#f4f1ea;--card:#fffdf8;--ink:#1c2230;--mute:#667085;--line:#d9d3c4;--acc:#0b4f8a;--accfg:#fff;--ok:#1e7a4c;--warn:#a85a00;--chip:#ebe6d8}
+@media (prefers-color-scheme:dark){:root{--bg:#14171d;--card:#1c2029;--ink:#e9e6dd;--mute:#97a0b0;--line:#2e3441;--acc:#6db3f2;--accfg:#10151c;--ok:#5ccf93;--warn:#f0a652;--chip:#272c37}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:40px 20px 64px}
+h1{font:700 clamp(28px,5vw,40px)/1.1 Georgia,"Times New Roman",serif;margin:0 0 8px;letter-spacing:-.01em}
+.sub{color:var(--mute);margin:0 0 28px;max-width:56ch}
+.search{position:sticky;top:0;padding:10px 0;background:var(--bg);z-index:2}
+input{width:100%;font:inherit;font-size:18px;padding:14px 16px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+input:focus{outline:none;border-color:var(--acc)}
+.count{color:var(--mute);font-size:14px;margin:10px 2px 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px;display:grid;grid-template-columns:1fr auto;gap:8px 20px;align-items:center}
+.card h2{font:600 18px/1.3 inherit;margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{font:600 13px ui-monospace,Consolas,monospace;background:var(--chip);border-radius:6px;padding:2px 8px}
+.chip.hit{background:var(--acc);color:var(--accfg)}
+.meta{font-size:14px;color:var(--mute)}
+.meta b{font-weight:600}.ok{color:var(--ok)}.warn{color:var(--warn)}
+.pw{font-family:ui-monospace,Consolas,monospace;color:var(--ink);background:var(--chip);padding:0 6px;border-radius:4px}
+a.dl{background:var(--acc);color:var(--accfg);text-decoration:none;font-weight:600;padding:12px 20px;border-radius:9px;white-space:nowrap;text-align:center}
+a.dl small{display:block;font-weight:400;opacity:.85;font-size:12px}
+a.dl:hover{filter:brightness(1.1)}
+.empty{text-align:center;color:var(--mute);padding:48px 0}
+footer{margin-top:36px;font-size:13px;color:var(--mute);border-top:1px solid var(--line);padding-top:16px}
+@media(max-width:560px){.card{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Epson Resetter Library</h1>
+<p class="sub">Type your printer model, like <b>L3210</b>, and download the adjustment program for it.</p>
+<div class="search"><input id="q" type="search" placeholder="Search model, e.g. L3110" autocomplete="off" autofocus aria-label="Search printer model"></div>
+<div class="count" id="count"></div>
+<div id="list"></div>
+<footer>Turn off antivirus before running Adjprog.exe, since these tools are often flagged as false positives. Use only on printers you own or service.</footer>
+</div>
+<script>
+const DATA=[{"title": "Epson L120", "models": ["L120"], "note": "Includes a second, alternative L120 build in the Alternative-version folder.", "password": "Epson L120", "complete": true, "size": 3177831, "file": "downloads/l120.zip"}, {"title": "Epson L121", "models": ["L121"], "note": "Incomplete: Adjprog.exe is not in the source folder.", "password": "", "complete": false, "size": 373519, "file": "downloads/l121.zip"}, {"title": "Epson L1210-L3210-L3250-L3251-L3260-L5290", "models": ["L1210", "L3210", "L3250", "L3251", "L3260", "L5290"], "note": "INKfinite build. Extra support files from a second copy are in alt-support-files.", "password": "inkfinitereset", "complete": true, "size": 4634766, "file": "downloads/l1210-family.zip"}, {"title": "Epson L130-L210-L220-L310-L360-L365", "models": ["L130", "L210", "L220", "L310", "L360", "L365"], "note": "Includes 32-bit and 64-bit L220 utilities.", "password": "", "complete": true, "size": 86099724, "file": "downloads/l130-l220.zip"}, {"title": "Epson L3110", "models": ["L3110"], "note": "Incomplete: Adjprog.exe is not in the source folder. Epson's official driver link is in Printer Driver Link.txt.", "password": "", "complete": false, "size": 304375, "file": "downloads/l3110.zip"}, {"title": "Epson L3150", "models": ["L3150"], "note": "Incomplete: Adjprog.exe is not in the source folder.", "password": "", "complete": false, "size": 89912, "file": "downloads/l3150.zip"}, {"title": "Epson L3156", "models": ["L3156"], "note": "Incomplete: Adjprog.exe is not in the source folder.", "password": "", "complete": false, "size": 89752, "file": "downloads/l3156.zip"}, {"title": "Epson L5190", "models": ["L5190"], "note": "", "password": "", "complete": true, "size": 4354154, "file": "downloads/l5190.zip"}, {"title": "Epson L565", "models": ["L565"], "note": "", "password": "", "complete": true, "size": 2796788, "file": "downloads/l565.zip"}, {"title": "Epson L6160-L6170-L6176-L6190", "models": ["L6160", "L6170", "L6176", "L6190"], "note": "", "password": "", "complete": true, "size": 3902100, "file": "downloads/l6160-family.zip"}, {"title": "Epson L805", "models": ["L805"], "note": "", "password": "", "complete": true, "size": 2696380, "file": "downloads/l805.zip"}];
+const $=s=>document.querySelector(s);
+const norm=s=>s.toLowerCase().replace(/[^a-z0-9]/g,"");
+const mb=n=>n>=1e6?(n/1e6).toFixed(1)+" MB":Math.max(1,Math.round(n/1e3))+" KB";
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function render(){
+  const q=norm($("#q").value);
+  const rows=DATA.map(d=>({d,hits:d.models.filter(m=>q&&norm(m).includes(q))}))
+    .filter(r=>!q||r.hits.length||norm(r.d.title).includes(q));
+  $("#count").textContent=q?`${rows.length} result${rows.length==1?"":"s"} for "${$("#q").value.trim()}"`:`${DATA.length} packages, ${DATA.reduce((a,d)=>a+d.models.length,0)} models`;
+  $("#list").innerHTML=rows.length?rows.map(({d,hits})=>`
+  <div class="card"><div>
+    <h2>${esc(d.title)}</h2>
+    <div class="chips">${d.models.map(m=>`<span class="chip${hits.includes(m)?" hit":""}">${esc(m)}</span>`).join("")}</div>
+    <div class="meta"><b class="${d.complete?"ok":"warn"}">${d.complete?"Includes Adjprog.exe":"Adjprog.exe missing"}</b>${d.password?` &middot; Password: <span class="pw">${esc(d.password)}</span>`:""}${d.note?`<br>${esc(d.note)}`:""}</div>
+  </div><a class="dl" href="${d.file}" download>Download<small>${mb(d.size)} &middot; .zip</small></a></div>`).join(""):`<div class="empty">No model matches "${esc($("#q").value)}".<br>Try just the number, like 3110.</div>`;
+}
+$("#q").addEventListener("input",render);render();
+</script>
+</body>
+</html>
