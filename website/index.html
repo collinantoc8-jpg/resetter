@@ -5,13 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Epson Resetter Library</title>
 <style>
-:root{--bg:#f4f1ea;--card:#fffdf8;--ink:#1c2230;--mute:#667085;--line:#d9d3c4;--acc:#0b4f8a;--accfg:#fff;--ok:#1e7a4c;--warn:#a85a00;--chip:#ebe6d8}
-@media (prefers-color-scheme:dark){:root{--bg:#14171d;--card:#1c2029;--ink:#e9e6dd;--mute:#97a0b0;--line:#2e3441;--acc:#6db3f2;--accfg:#10151c;--ok:#5ccf93;--warn:#f0a652;--chip:#272c37}}
+:root{--bg:#f4f1ea;--card:#fffdf8;--ink:#1c2230;--mute:#667085;--line:#d9d3c4;--acc:#0b4f8a;--accfg:#fff;--ok:#1e7a4c;--warn:#a85a00;--chip:#ebe6d8;--tipbg:#e6f0fa;--tipbd:#9cc3e8}
+@media (prefers-color-scheme:dark){:root{--bg:#14171d;--card:#1c2029;--ink:#e9e6dd;--mute:#97a0b0;--line:#2e3441;--acc:#6db3f2;--accfg:#10151c;--ok:#5ccf93;--warn:#f0a652;--chip:#272c37;--tipbg:#1b2a3a;--tipbd:#2f5578}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,sans-serif}
 .wrap{max-width:880px;margin:0 auto;padding:40px 20px 64px}
 h1{font:700 clamp(28px,5vw,40px)/1.1 Georgia,"Times New Roman",serif;margin:0 0 8px;letter-spacing:-.01em}
-.sub{color:var(--mute);margin:0 0 28px;max-width:56ch}
+.sub{color:var(--mute);margin:0 0 16px;max-width:56ch}
+.tip{background:var(--tipbg);border:1px solid var(--tipbd);border-radius:10px;padding:10px 14px;margin:0 0 20px;font-size:15px}
+.tip b{font-weight:700}
 .search{position:sticky;top:0;padding:10px 0;background:var(--bg);z-index:2}
 input{width:100%;font:inherit;font-size:18px;padding:14px 16px;border:2px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
 input:focus{outline:none;border-color:var(--acc)}
@@ -36,13 +38,14 @@ footer{margin-top:36px;font-size:13px;color:var(--mute);border-top:1px solid var
 <div class="wrap">
 <h1>Epson Resetter Library</h1>
 <p class="sub">Type your printer model, like <b>L3210</b>, and download the adjustment program for it.</p>
+<div class="tip"><b>Use Microsoft Edge:</b> for best results, open this page and download files using the Edge browser.</div>
 <div class="search"><input id="q" type="search" placeholder="Search model, e.g. L3110" autocomplete="off" autofocus aria-label="Search printer model"></div>
 <div class="count" id="count"></div>
 <div id="list"></div>
 <footer>Turn off antivirus before running Adjprog.exe, since these tools are often flagged as false positives. Use only on printers you own or service.</footer>
 </div>
 <script>
-const DATA=[{"title": "Epson L120", "models": ["L120"], "note": "Includes a second, alternative L120 build in the Alternative-version folder.", "password": "Epson L120", "complete": true, "size": 3177831, "file": "downloads/l120.zip"}, {"title": "Epson L121", "models": ["L121"], "note": "Incomplete: Adjprog.exe is not in the source folder.", "password": "", "complete": false, "size": 373519, "file": "downloads/l121.zip"}, {"title": "Epson L1210-L3210-L3250-L3251-L3260-L5290", "models": ["L1210", "L3210", "L3250", "L3251", "L3260", "L5290"], "note": "INKfinite build. Extra support files from a second copy are in alt-support-files.", "password": "i-loadzone.com", "complete": true, "size": 4634766, "file": "downloads/l1210-family.zip"}, {"title": "Epson L130-L210-L220-L310-L360-L365", "models": ["L130", "L210", "L220", "L310", "L360", "L365"], "note": "Includes 32-bit and 64-bit L220 utilities.", "password": "", "complete": true, "size": 86099724, "file": "downloads/l130-l220.zip"}, {"title": "Epson L3110", "models": ["L3110"], "note": "Incomplete: Adjprog.exe is not in the source folder. Epson's official driver link is in Printer Driver Link.txt.", "password": "", "complete": false, "size": 304375, "file": "downloads/l3110.zip"}, {"title": "Epson L3150", "models": ["L3150"], "note": "Incomplete: Adjprog.exe is not in the source folder.", "password": "", "complete": false, "size": 89912, "file": "downloads/l3150.zip"}, {"title": "Epson L3156", "models": ["L3156"], "note": "Incomplete: Adjprog.exe is not in the source folder.", "password": "", "complete": false, "size": 89752, "file": "downloads/l3156.zip"}, {"title": "Epson L5190", "models": ["L5190"], "note": "", "password": "", "complete": true, "size": 4354154, "file": "downloads/l5190.zip"}, {"title": "Epson L565", "models": ["L565"], "note": "", "password": "", "complete": true, "size": 2796788, "file": "downloads/l565.zip"}, {"title": "Epson L6160-L6170-L6176-L6190", "models": ["L6160", "L6170", "L6176", "L6190"], "note": "", "password": "", "complete": true, "size": 3902100, "file": "downloads/l6160-family.zip"}, {"title": "Epson L805", "models": ["L805"], "note": "", "password": "", "complete": true, "size": 2696380, "file": "downloads/l805.zip"}];
+const DATA=[{"title": "Epson L120", "models": ["L120"], "note": "Includes a second, alternative L120 build in the Alternative-version folder.", "password": "Epson L120", "complete": true, "size": 3177831, "file": "downloads/l120.zip"}, {"title": "Epson L1210-L3210-L3250-L3251-L3260-L5290", "models": ["L1210", "L3210", "L3250", "L3251", "L3260", "L5290"], "note": "INKfinite build. Extra support files from a second copy are in alt-support-files.", "password": "i-loadzone.com", "complete": true, "size": 4634766, "file": "downloads/l1210-family.zip"}, {"title": "Epson L130-L210-L220-L310-L360-L365", "models": ["L130", "L210", "L220", "L310", "L360", "L365"], "note": "Includes 32-bit and 64-bit L220 utilities.", "password": "", "complete": true, "size": 86099724, "file": "downloads/l130-l220.zip"}, {"title": "Epson L5190", "models": ["L5190"], "note": "", "password": "", "complete": true, "size": 4354154, "file": "downloads/l5190.zip"}, {"title": "Epson L565", "models": ["L565"], "note": "", "password": "", "complete": true, "size": 2796788, "file": "downloads/l565.zip"}, {"title": "Epson L6160-L6170-L6176-L6190", "models": ["L6160", "L6170", "L6176", "L6190"], "note": "", "password": "", "complete": true, "size": 3902100, "file": "downloads/l6160-family.zip"}, {"title": "Epson L805", "models": ["L805"], "note": "", "password": "", "complete": true, "size": 2696380, "file": "downloads/l805.zip"}];
 const $=s=>document.querySelector(s);
 const norm=s=>s.toLowerCase().replace(/[^a-z0-9]/g,"");
 const mb=n=>n>=1e6?(n/1e6).toFixed(1)+" MB":Math.max(1,Math.round(n/1e3))+" KB";
