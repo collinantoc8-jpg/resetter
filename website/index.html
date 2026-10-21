@@ -32,10 +32,18 @@ a.dl:hover{filter:brightness(1.1)}
 .empty{text-align:center;color:var(--mute);padding:48px 0}
 footer{margin-top:36px;font-size:13px;color:var(--mute);border-top:1px solid var(--line);padding-top:16px}
 @media(max-width:560px){.card{grid-template-columns:1fr}}
+.lock{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.lock[hidden]{display:none}
+.lockbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 24px;width:100%;max-width:360px;text-align:center}
+.lockbox h2{font:700 22px/1.2 Georgia,"Times New Roman",serif;margin:0 0 6px}
+.lockbox p{color:var(--mute);margin:0 0 16px;font-size:15px}
+.lockbox button{margin-top:12px;width:100%;font:inherit;font-weight:600;padding:12px;border:0;border-radius:9px;background:var(--acc);color:var(--accfg);cursor:pointer}
+.lockerr{color:var(--warn);font-size:14px;margin-top:10px;min-height:20px}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="lock" id="lock"><div class="lockbox"><h2>Enter password</h2><p>This library is password protected.</p><input id="pw" type="password" placeholder="Password" autocomplete="off" aria-label="Password"><button id="go" type="button">Unlock</button><div class="lockerr" id="err"></div></div></div>
+<div class="wrap" id="app" hidden>
 <h1>Epson Resetter Library</h1>
 <p class="sub">Type your printer model, like <b>L3210</b>, and download the adjustment program for it.</p>
 <div class="tip"><b>Use Microsoft Edge:</b> for best results, open this page and download files using the Edge browser.</div>
@@ -63,6 +71,15 @@ function render(){
   </div><a class="dl" href="${d.file}" download>Download<small>${mb(d.size)} &middot; .zip</small></a></div>`).join(""):`<div class="empty">No model matches "${esc($("#q").value)}".<br>Try just the number, like 3110.</div>`;
 }
 $("#q").addEventListener("input",render);render();
+const PW="cols12345";
+function unlock(){$("#lock").hidden=true;$("#app").hidden=false;$("#q").focus();}
+function tryPw(){
+  if($("#pw").value===PW){try{sessionStorage.setItem("unlocked","1")}catch(e){}unlock();}
+  else{$("#err").textContent="Wrong password.";$("#pw").select();}
+}
+$("#go").addEventListener("click",tryPw);
+$("#pw").addEventListener("keydown",e=>{if(e.key==="Enter")tryPw();});
+try{if(sessionStorage.getItem("unlocked")==="1")unlock();else $("#pw").focus();}catch(e){$("#pw").focus();}
 </script>
 </body>
 </html>
